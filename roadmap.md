@@ -1,6 +1,7 @@
 # FAST IMMO — étapes à valider
 
-- [ ] Valider la structure et la direction artistique proposées.
+- [x] Valider la structure et la direction artistique proposées.
+- [ ] Intégrer le téléphone et WhatsApp +221 77 000 00 00 ; administration sans profils supplémentaires.
 - [ ] Construire l’identité visuelle et la navigation partagée.
 - [ ] Développer la page d’accueil.
 - [ ] Développer le catalogue et les filtres.

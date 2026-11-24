@@ -1,23 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { ArrowUpRight, Handshake, House, HeartHandshake, KeyRound, Building2, MessagesSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PropertySearch } from '@/components/real-estate/search';
+import { PropertyCard } from '@/components/real-estate/property-card';
+import { ProjectCTA } from '@/components/real-estate/shell';
+import { photos, pageHead } from '@/data/brand';
+import { demoProperties } from '@/data/properties';
+import { propertiesQuery } from '@/services/queries';
+export const Route=createFileRoute('/')({head:()=>pageHead('Votre immobilier à Dakar','FAST IMMO, agence immobilière à Dakar : achat, location et accompagnement de votre projet au Sénégal. Un professionnel à votre écoute.'),loader:({context})=>context.queryClient.ensureQueryData(propertiesQuery),component:Home});
+function Home(){const {data}=useSuspenseQuery(propertiesQuery);const properties=data.length?data.filter(p=>p.featured).slice(0,6):demoProperties.slice(0,3);return <main><section className="hero"><img className="hero-image" src={photos.villa} alt="Villa contemporaine et piscine dans un jardin tropical — photographie d’ambiance" fetchPriority="high"/><div className="container hero-content"><p className="hero-kicker">L’immobilier à Dakar, autrement.</p><p className="hero-brand">FAST IMMO</p><h1>Votre prochain chez-vous<br/>commence ici.</h1><p className="hero-description">Découvrez nos opportunités immobilières et bénéficiez d’un accompagnement professionnel à chaque étape de votre projet.</p><p className="hero-slogan">Un professionnel à votre écoute</p><Link to="/biens" className="hero-discover">Découvrir nos biens <ArrowUpRight size={17}/></Link></div><div className="container hero-bottom"><PropertySearch/></div></section><section className="reassurance"><div className="container reassurance-grid">{[{Icon:Handshake,title:'Accompagnement personnalisé',text:'Un interlocuteur attentif à votre projet.'},{Icon:House,title:'Sélection de biens immobiliers',text:'Des biens en accord avec vos attentes.'},{Icon:HeartHandshake,title:'Proximité et écoute',text:'Votre confiance au cœur de notre relation.'}].map(({Icon,title,text})=><div className="reassurance-item" key={title}><Icon/><div><h3>{title}</h3><p>{text}</p></div></div>)}</div></section><section className="section container"><div className="section-heading"><div><p className="section-kicker">Des lieux, de nouvelles possibilités</p><h2>Notre sélection de biens</h2><p>Un nouveau départ, une belle adresse. Trouvez le bien qui vous correspond.</p></div><Link to="/biens" className="section-link">Voir tous les biens <ArrowUpRight/></Link></div>{!data.length && <p className="demo-note">Aperçu du catalogue : exemples illustratifs, non disponibles. Les annonces de l’agence seront publiées ici.</p>}<div className="property-grid">{properties.map(p=><PropertyCard key={p.id} property={p}/>)}</div></section><section className="section categories-section"><div className="container"><div className="section-heading"><div><p className="section-kicker">À chaque projet, son espace</p><h2>Quel bien recherchez-vous ?</h2></div></div><div className="category-grid">{[{label:'Villas',type:'Villa',image:photos.villa},{label:'Appartements',type:'Appartement',image:photos.interior},{label:'Terrains',type:'Terrain',image:photos.villa},{label:'Bureaux',type:'Bureau',image:photos.interior},{label:'Immeubles',type:'Immeuble',image:photos.residence}].map(c=><Link to="/biens" search={{type:c.type}} className="category-card" key={c.type}><img src={c.image} alt={`${c.label} — photographie d’ambiance`} loading="lazy"/><span className="category-label">{c.label}<ArrowUpRight size={18}/></span></Link>)}</div></div></section><section className="section container editorial"><img className="editorial-photo" src={photos.residence} alt="Architecture contemporaine d’une résidence" loading="lazy"/><div><p className="section-kicker">L’immobilier est avant tout une rencontre</p><h2>Votre projet mérite<br/>une véritable écoute.</h2><p>À Dakar et au Sénégal, FAST IMMO place vos besoins au centre de votre recherche immobilière. Acheter, louer ou confier un bien : chaque projet commence par un échange.</p><p className="editorial-slogan">Un professionnel à votre écoute.</p><Button asChild variant="outline" size="lg"><Link to="/a-propos">Découvrir FAST IMMO <ArrowUpRight/></Link></Button></div></section><section className="section container"><div className="section-heading"><div><p className="section-kicker">Votre projet, notre attention</p><h2>Parlons de vos besoins</h2></div><Link to="/services" className="section-link">Explorer nos services <ArrowUpRight/></Link></div><div className="services-grid">{[{Icon:KeyRound,title:'Acheter ou louer',text:'Précisez vos critères, votre budget et le quartier où vous souhaitez vivre.'},{Icon:Building2,title:'Vendre ou confier un bien',text:'Échangez avec l’agence sur votre bien et l’accompagnement recherché.'},{Icon:MessagesSquare,title:'Être conseillé',text:'Posez vos questions et discutons des prochaines étapes de votre projet.'}].map(({Icon,title,text})=><div className="service-item" key={title}><Icon/><h3>{title}</h3><p>{text}</p></div>)}</div></section><section className="section process"><div className="container"><div className="section-heading"><div><p className="section-kicker">Avançons ensemble</p><h2>De la première rencontre à votre prochaine adresse.</h2></div></div><div className="process-grid">{[{title:'Échangeons sur votre projet',text:'Vos envies, votre budget et vos priorités constituent le point de départ.'},{title:'Affinons votre recherche',text:'Définissons les critères qui comptent vraiment pour vous.'},{title:'Découvrons les biens',text:'Échangeons sur les opportunités et organisons les visites adaptées.'},{title:'Préparons la suite',text:'Clarifions ensemble les prochaines étapes de votre projet.'}].map((s,i)=><div className="process-step" key={s.title}><span className="step-number">0{i+1}</span><h3>{s.title}</h3><p>{s.text}</p></div>)}</div></div></section><ProjectCTA/></main>;}

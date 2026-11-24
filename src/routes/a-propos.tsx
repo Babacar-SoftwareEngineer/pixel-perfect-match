@@ -1,0 +1,7 @@
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { ArrowUpRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ProjectCTA } from '@/components/real-estate/shell';
+import { pageHead, photos } from '@/data/brand';
+export const Route=createFileRoute('/a-propos')({head:()=>pageHead('À propos de l’agence','FAST IMMO est une agence immobilière basée à Dakar au Sénégal. Un professionnel à votre écoute pour votre projet immobilier.'),component:About});
+function About(){return <main><section className="page-intro"><div className="container"><p className="section-kicker">FAST IMMO, Dakar</p><h1>Un professionnel à votre écoute.</h1><p>Une relation de confiance commence par une attention sincère à votre projet.</p></div></section><section className="container section editorial"><img className="editorial-photo" src={photos.villa} alt="Villa contemporaine — photographie d’ambiance"/><div><p className="section-kicker">Votre projet immobilier au Sénégal</p><h2>Une agence.<br/>Votre prochain chapitre.</h2><p>FAST IMMO est une agence immobilière basée à Dakar, au Sénégal. Notre point de départ : comprendre ce qui compte pour vous et les attentes qui donnent forme à votre projet.</p><p>Pour une recherche immobilière ou un bien à confier, prenons le temps d’échanger sur vos besoins et les possibilités d’accompagnement.</p><Button asChild size="lg"><Link to="/contact">Rencontrons-nous <ArrowUpRight/></Link></Button></div></section><ProjectCTA/></main>;}
